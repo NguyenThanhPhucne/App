@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function loadTasks() {
     try {
-      const response = await fetch('http://localhost:3000/api/tasks');
+      const response = await fetch('https://app-umoj.vercel.app/api/tasks');
       const tasks = await response.json();
       const taskList = document.getElementById('task-list');
       taskList.innerHTML = '';
@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
       tags: document.getElementById('tags').value.split(',').map(tag => tag.trim()).filter(tag => tag)
     };
     try {
-      const response = await fetch('http://localhost:3000/api/tasks', {
+      const response = await fetch('https://app-umoj.vercel.app/api/tasks', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(task)
@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
   async function toggleStatus(id, status) {
     try {
       const newStatus = status === 'pending' ? 'completed' : 'pending';
-      const response = await fetch(`http://localhost:3000/api/tasks/${id}`, {
+      const response = await fetch(`https://app-umoj.vercel.app/api/tasks/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: newStatus })
@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function deleteTask(id) {
     try {
-      const response = await fetch(`http://localhost:3000/api/tasks/${id}`, {
+      const response = await fetch(`https://app-umoj.vercel.app/api/tasks/${id}`, {
         method: 'DELETE'
       });
       if (!response.ok) throw new Error((await response.json()).error);
