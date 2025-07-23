@@ -1,23 +1,252 @@
 <!DOCTYPE html>
-  <html lang="en">
-  <head>
+<html lang="en">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>To-Do List</title>
-    <link rel="stylesheet" href="./style.css">
-  </head>
-  <body>
-    <div class="container">
-      <h1>To-Do List</h1>
-      <form id="task-form">
-        <input type="number" id="task_id" placeholder="Task ID" required>
-        <input type="text" id="description" placeholder="Description" required>
-        <input type="date" id="due_date" required>
-        <input type="text" id="tags" placeholder="Tags (comma-separated)">
-        <button type="submit">Add Task</button>
-      </form>
-      <ul id="task-list"></ul>
+    <title>To Do App Management</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app">
+        <!-- Theme Toggle -->
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+            <span class="theme-toggle-sun">Light Mode</span>
+            <span class="theme-toggle-moon">Dark Mode</span>
+        </button>
+
+        <div class="container">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-content">
+                    <h1 class="title">Modern Task Manager</h1>
+                    <p class="subtitle">Streamline your productivity with intelligent task management</p>
+                </div>
+            </header>
+
+            <!-- Analytics Dashboard -->
+            <section class="analytics-section">
+                <div class="analytics-grid">
+                    <div class="analytics-card total-card">
+                        <div class="card-header">
+                            <div class="card-icon">ALL</div>
+                            <div class="card-trend positive" id="total-trend">+0</div>
+                        </div>
+                        <div class="card-content">
+                            <div class="card-number" id="total-tasks">0</div>
+                            <div class="card-label">Total Tasks</div>
+                        </div>
+                        <div class="card-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="total-progress"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="analytics-card pending-card">
+                        <div class="card-header">
+                            <div class="card-icon">ACTIVE</div>
+                            <div class="card-trend neutral" id="pending-trend">+0</div>
+                        </div>
+                        <div class="card-content">
+                            <div class="card-number" id="pending-tasks">0</div>
+                            <div class="card-label">In Progress</div>
+                        </div>
+                        <div class="card-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill pending-fill" id="pending-progress"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="analytics-card completed-card">
+                        <div class="card-header">
+                            <div class="card-icon">DONE</div>
+                            <div class="card-trend positive" id="completed-trend">+0</div>
+                        </div>
+                        <div class="card-content">
+                            <div class="card-number" id="completed-tasks">0</div>
+                            <div class="card-label">Completed</div>
+                        </div>
+                        <div class="card-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill completed-fill" id="completed-progress"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="analytics-card overdue-card">
+                        <div class="card-header">
+                            <div class="card-icon">LATE</div>
+                            <div class="card-trend negative" id="overdue-trend">+0</div>
+                        </div>
+                        <div class="card-content">
+                            <div class="card-number" id="overdue-tasks">0</div>
+                            <div class="card-label">Overdue</div>
+                        </div>
+                        <div class="card-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill overdue-fill" id="overdue-progress"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Task Creation Form -->
+            <section class="form-section">
+                <div class="form-container">
+                    <div class="form-header">
+                        <h2 class="form-title">Create New Task</h2>
+                        <div class="form-subtitle">Add a new task to your workflow</div>
+                    </div>
+                    
+                    <form id="task-form" class="task-form">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="task_id" class="form-label">Task ID</label>
+                                <div class="input-wrapper">
+                                    <input type="number" id="task_id" class="form-input" placeholder="Enter unique ID" required>
+                                    <div class="input-focus-border"></div>
+                                </div>
+                                <div class="error-message" id="task-id-error"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="due_date" class="form-label">Due Date</label>
+                                <div class="input-wrapper">
+                                    <input type="date" id="due_date" class="form-input" required>
+                                    <div class="input-focus-border"></div>
+                                </div>
+                                <div class="error-message" id="due-date-error"></div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="description" class="form-label">Task Description</label>
+                            <div class="input-wrapper">
+                                <input type="text" id="description" class="form-input" placeholder="What needs to be accomplished?" required>
+                                <div class="input-focus-border"></div>
+                            </div>
+                            <div class="error-message" id="description-error"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="tags" class="form-label">Tags</label>
+                            <div class="input-wrapper">
+                                <input type="text" id="tags" class="form-input" placeholder="development, urgent, meeting (comma-separated)">
+                                <div class="input-focus-border"></div>
+                            </div>
+                            <div class="form-hint">Separate multiple tags with commas</div>
+                        </div>
+
+                        <button type="submit" class="btn-primary" id="add-btn">
+                            <span class="btn-content">
+                                <span class="btn-text">Create Task</span>
+                                <span class="btn-loader">
+                                    <span class="loader-spinner"></span>
+                                    Processing...
+                                </span>
+                            </span>
+                            <div class="btn-ripple"></div>
+                        </button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Loading State -->
+            <div class="loading-overlay hidden" id="loading-container">
+                <div class="loading-content">
+                    <div class="loading-spinner">
+                        <div class="spinner-ring"></div>
+                        <div class="spinner-ring"></div>
+                        <div class="spinner-ring"></div>
+                    </div>
+                    <div class="loading-text">Loading your tasks...</div>
+                </div>
+            </div>
+
+            <!-- Tasks Workspace -->
+            <section class="workspace-section hidden" id="tasks-container">
+                <div class="workspace-header">
+                    <h2 class="workspace-title">Task Workspace</h2>
+                    <div class="workspace-controls">
+                        <div class="view-toggle">
+                            <button class="view-btn active" data-view="board">Board View</button>
+                            <button class="view-btn" data-view="list">List View</button>
+                        </div>
+                        <div class="sort-controls">
+                            <select class="sort-select" id="sort-select">
+                                <option value="date">Sort by Date</option>
+                                <option value="priority">Sort by Priority</option>
+                                <option value="status">Sort by Status</option>
+                                <option value="id">Sort by ID</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tasks-board" id="tasks-board">
+                    <!-- Pending Tasks Column -->
+                    <div class="task-column pending-column">
+                        <div class="column-header">
+                            <div class="column-title">
+                                <div class="column-indicator pending-indicator"></div>
+                                <span class="column-name">In Progress</span>
+                                <div class="column-count" id="pending-count">0</div>
+                            </div>
+                            <div class="column-actions">
+                                <button class="column-action-btn" id="sort-pending">Sort</button>
+                            </div>
+                        </div>
+                        
+                        <div class="task-list" id="pending-list">
+                            <div class="empty-state" id="pending-empty">
+                                <div class="empty-illustration">
+                                    <div class="empty-circle">
+                                        <div class="empty-lines">
+                                            <div class="empty-line"></div>
+                                            <div class="empty-line"></div>
+                                            <div class="empty-line"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <h3 class="empty-title">No Active Tasks</h3>
+                                <p class="empty-description">All caught up! Create a new task to get started.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Completed Tasks Column -->
+                    <div class="task-column completed-column">
+                        <div class="column-header">
+                            <div class="column-title">
+                                <div class="column-indicator completed-indicator"></div>
+                                <span class="column-name">Completed</span>
+                                <div class="column-count" id="completed-count">0</div>
+                            </div>
+                            <div class="column-actions">
+                                <button class="column-action-btn" id="clear-completed">Clear</button>
+                            </div>
+                        </div>
+                        
+                        <div class="task-list" id="completed-list">
+                            <div class="empty-state" id="completed-empty">
+                                <div class="empty-illustration">
+                                    <div class="empty-trophy">
+                                        <div class="trophy-cup"></div>
+                                        <div class="trophy-base"></div>
+                                    </div>
+                                </div>
+                                <h3 class="empty-title">No Completed Tasks</h3>
+                                <p class="empty-description">Complete some tasks to see your achievements here.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
     </div>
-    <script src="./script.js"></script>
-  </body>
-  </html>
+
+    <script src="script.js"></script>
+</body>
+</html>

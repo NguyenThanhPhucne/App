@@ -4,7 +4,15 @@ const express = require('express');
   const tasksRouter = require('./routes/tasks');
   const requestLogger = require('./middleware/logger');
   require('dotenv').config();
-
+  const CORS = {
+    origin: [
+        "https://app-32pb.vercel.app"
+    ],
+    credentials: true,
+    optionsSuccessStatus: 200,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+};
   const app = express();
 
   // Middleware
